@@ -2,7 +2,7 @@
 #include <vector>
 
 using namespace std;
-YES
+ABC
 CAB
 XYZ
 AXZ
@@ -17,12 +17,12 @@ for (int i = 0; i < book.size(); i++) {
     }
 }
 
-YES CAB BCA
+HELLO
 XYZ
 AXZ
 
 
-                        YESC            YES
+                        ABCC            HELLO
 bool isAnagram(string current, string cannidate) {
     vector<char> currChar = current.getVector();
     vector<char> cannChar = cannidate.getVector();
