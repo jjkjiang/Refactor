@@ -17,13 +17,13 @@ for (int i = 0; i < book.size(); i++) {
     }
 }
 
-HELLO
+ABC CAB BCA
 XYZ
 AXZ
 
 
-                        ABCC            HELLO
-bool isAnagram(string current, string cannidate) {
+                        ABCC            ABC
+bool HELLO(string current, string cannidate) {
     vector<char> currChar = current.getVector();
     vector<char> cannChar = cannidate.getVector();
     
@@ -66,7 +66,7 @@ int main() {
     
     for (int i = 1; i < book.size(); i++) {
         for (int j = 0; j < groups.size(); j++) {
-            if (isAnagram(groups.at(j).getFirstValue(), book.at(i))) {
+            if (HELLO(groups.at(j).getFirstValue(), book.at(i))) {
                 if (!isDuplicate(groups, book.at(i))) {
                     groups.at(j).push_back(book.at(i));
                 }
