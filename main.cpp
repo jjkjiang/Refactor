@@ -4,6 +4,15 @@
 #include <fstream>
 using namespace std;
 
+bool isANumberOrLetter(char candidate) {
+    if ((candidate >= '0' && candidate <= '9') ||
+    (candidate >= 'a' && candidate <= 'z') ||
+    (candidate >= 'A' && candidate <= 'Z')) {
+        return true;
+    }
+    return false;
+}
+
 int main(int argc, char* argv[] ) {
     
     // checks if the program is run with the correct input.
@@ -73,44 +82,37 @@ int main(int argc, char* argv[] ) {
             
             if (currentLine.find(original, index) != 0 && currentLine.find(original, index) + original.size() < highestIndex) {
                 // goes into this loop if NOT the front or back of the line
-                
                 char peekFront = currentLine.at(currentLine.find(original, index) - 1);
                 char peekBack = currentLine.at(currentLine.find(original, index) + original.length());
                 
-                if ((peekFront > 47 && peekFront < 58) || (peekFront > 64 && peekFront < 91) || 
-                (peekFront > 96 && peekFront < 123) || (peekBack > 47 && peekBack < 58) ||
-                (peekBack > 64 && peekBack < 91) || (peekBack > 96 && peekBack < 123)) {
+                if (isANumberOrLetter(peekFront) || isANumberOrLetter(peekBack)) {
                     index = currentLine.find(original, index) + 1;
                 } else {
                     firstHalf = currentLine.substr(0, currentLine.find(original, index));
-                    secondHalf = currentLine.substr(currentLine.find(original, index) + original.length(), original.length() - (currentLine.find(original, index) + original.length()));
+                    secondHalf = currentLine.substr(currentLine.find(original, index) + original.length(), currentLine.length() - (currentLine.find(original, index) + original.length()));
                     currentLine = firstHalf + refactor + secondHalf;
                 } 
             } else if (currentLine.find(original, index) != 0) {
-                
                 // goes into this loop if NOT the front
                 char peekFront = currentLine.at(currentLine.find(original, index) - 1);
                 
-                if ((peekFront > 47 && peekFront < 58) || (peekFront > 64 && peekFront < 91) || 
-                (peekFront > 96 && peekFront < 123)) {
+                if (isANumberOrLetter(peekFront)) {
                     index = currentLine.find(original, index) + 1;
                 } else {
                     firstHalf = currentLine.substr(0, currentLine.find(original, index));
                     currentLine = firstHalf + refactor + secondHalf;
                 }
             } else if (currentLine.find(original, index) + original.size() < highestIndex) {
-                
                 // goes into this loop if NOT the back
                 char peekBack = currentLine.at(currentLine.find(original, index) + original.length());
-                if ((peekBack > 47 && peekBack < 58) || (peekBack > 64 && peekBack < 91) || 
-                (peekBack > 96 && peekBack < 123)) {
+                cout << peekBack << endl;
+                if (isANumberOrLetter(peekBack)) {
                     index = currentLine.find(original, index) + 1;
                 } else {
-                    secondHalf = currentLine.substr(currentLine.find(original, index) + original.length(), original.length() - (currentLine.find(original, index) + original.length()));
+                    secondHalf = currentLine.substr(currentLine.find(original, index) + original.length(), currentLine.length() - (currentLine.find(original, index) + original.length()));
                     currentLine = firstHalf + refactor + secondHalf;
                 }
             } else {
-                
                 // goes into this loop if NOT any
                 currentLine = firstHalf + refactor + secondHalf;
             }
