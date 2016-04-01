@@ -4,6 +4,28 @@
 #include <fstream>
 using namespace std;
 
+// // this is dumb
+// struct lineInfo() {
+//     lineInfo();
+//     lineInfo(string, string, int);
+    
+//     string currentLine;
+//     string userString;
+//     int currentIndex;
+// }
+
+// lineInfo() {
+//     currentLine = "";
+//     userString = "";
+//     currentIndex = 0;
+// }
+
+// lineInfo(string currentLine, string userString, int currentIndex) {
+//     this->currentLine = currentLine;
+//     this->userString = userString;
+//     this->currentIndex = currentIndex;
+// }
+
 bool isANumberOrLetter(char candidate) {
     if ((candidate >= '0' && candidate <= '9') ||
     (candidate >= 'a' && candidate <= 'z') ||
@@ -11,6 +33,30 @@ bool isANumberOrLetter(char candidate) {
         return true;
     }
     return false;
+}
+
+bool isNotFrontOfString(string currentLine, string userString, int currentIndex) {
+    if (currentLine.find(userString, currentIndex) != 0) {
+        return true;
+    }
+    return false;
+}
+
+bool isNotBackOfString(string currentLine, string userString, int currentIndex) {
+    int highestIndex = currentLine.size() - 1;
+    if (currentLine.find(userString, currentIndex) + userString.size() < highestIndex) {
+        return true;
+    }
+    return false;
+}
+
+string getFrontOfIndexedWord(string currentLine, string userString, int currentIndex) {
+    return currentLine.substr(0, currentLine.find(userString, currentIndex));
+}
+
+string getBackOfIndexedWord(string currentLine, string userString, int currentIndex) {
+    return currentLine.substr(currentLine.find(userString, currentIndex) + userString.length(), 
+    currentLine.length() - (currentLine.find(userString, currentIndex) + userString.length()));
 }
 
 int main(int argc, char* argv[] ) {
@@ -75,12 +121,11 @@ int main(int argc, char* argv[] ) {
         while (currentLine.find(original, index) != string::npos) {
             string firstHalf = "";
             string secondHalf = "";
-            int highestIndex = currentLine.size() - 1;
             
             // multiple branches in case you wish to refactor "int" but not variables such as "int1", or if you are
             // going to refactor "in" and do not want "int" to be modifed at all.
             
-            if (currentLine.find(original, index) != 0 && currentLine.find(original, index) + original.size() < highestIndex) {
+            if (isNotFrontOfString(currentLine, original, index) && isNotBackOfString(currentLine, original, index)) {
                 // goes into this loop if NOT the front or back of the line
                 char peekFront = currentLine.at(currentLine.find(original, index) - 1);
                 char peekBack = currentLine.at(currentLine.find(original, index) + original.length());
@@ -88,28 +133,27 @@ int main(int argc, char* argv[] ) {
                 if (isANumberOrLetter(peekFront) || isANumberOrLetter(peekBack)) {
                     index = currentLine.find(original, index) + 1;
                 } else {
-                    firstHalf = currentLine.substr(0, currentLine.find(original, index));
-                    secondHalf = currentLine.substr(currentLine.find(original, index) + original.length(), currentLine.length() - (currentLine.find(original, index) + original.length()));
+                    firstHalf = getFrontOfIndexedWord(currentLine, original, index);
+                    secondHalf = getBackOfIndexedWord(currentLine, original, index);
                     currentLine = firstHalf + refactor + secondHalf;
                 } 
-            } else if (currentLine.find(original, index) != 0) {
+            } else if (isNotFrontOfString(currentLine, original, index)) {
                 // goes into this loop if NOT the front
                 char peekFront = currentLine.at(currentLine.find(original, index) - 1);
                 
                 if (isANumberOrLetter(peekFront)) {
                     index = currentLine.find(original, index) + 1;
                 } else {
-                    firstHalf = currentLine.substr(0, currentLine.find(original, index));
+                    firstHalf = getFrontOfIndexedWord(currentLine, original, index);
                     currentLine = firstHalf + refactor + secondHalf;
                 }
-            } else if (currentLine.find(original, index) + original.size() < highestIndex) {
+            } else if (isNotBackOfString(currentLine, original, index)) {
                 // goes into this loop if NOT the back
                 char peekBack = currentLine.at(currentLine.find(original, index) + original.length());
-                cout << peekBack << endl;
                 if (isANumberOrLetter(peekBack)) {
                     index = currentLine.find(original, index) + 1;
                 } else {
-                    secondHalf = currentLine.substr(currentLine.find(original, index) + original.length(), currentLine.length() - (currentLine.find(original, index) + original.length()));
+                    secondHalf = getBackOfIndexedWord(currentLine, original, index);
                     currentLine = firstHalf + refactor + secondHalf;
                 }
             } else {
